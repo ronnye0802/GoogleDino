@@ -25,7 +25,6 @@ clock = pygame.time.Clock()
 SCHERMO = pygame.display.set_mode((600, 300))
 pygame.display.set_caption("DinoGame! %d FPS" % clock.get_fps())
 FPS = 60
-AVANZ = 4
 FONT = pygame.font.SysFont('Comic Sans MS', 20, bold=False)
 
 # Variabile booleana che per il main loop
@@ -74,9 +73,10 @@ def initialize():
     global pavx, pavy, pavx2, pavy2
     global walkpoint
     global cacti
-    global score, delta
+    global score, time
     global DIFF
     global clouds
+    global AVANZ
     # DIFF = pygame.event.Event(DIFF)
     # pygame.time.set_timer(DIFF, 10000)
     dinox, dinoy, dinovely, jumping = 70, 200, 0, False
@@ -84,7 +84,9 @@ def initialize():
     walkpoint = 0
     cacti = [Cactus()]
     clouds = [Cloud()]
-    score, delta = 0, 0
+    score, time = 0, 0
+    AVANZ = 4
+
 
 
 # Chiamo la funzione inizializza
@@ -101,7 +103,7 @@ def draw():
     for i in clouds:
         i.generate()
     SCHERMO.blit(cammina[walkpoint], (dinox, dinoy))
-    scoreRender = FONT.render(str(score), 1, (0, 0, 0))
+    scoreRender = FONT.render(str(int(score)), 1, (0, 0, 0))
     SCHERMO.blit(scoreRender, (450, 10))
 
 
@@ -126,12 +128,21 @@ def gameover():
 
 # Main loop del gioco, dove avvengono la maggior parte dei calcoli
 while running:
-    score += 1
+    score += 0.166
+    time += 0.016
+    pavx -= AVANZ
+    
+    if pavx <= -1200:
+        pavx = 0
+    
+    if time > 10:
+		time = 0
+		AVANZ += 0.5
     if dinoy >= 200:
         jumping = False
         dinoy = 200
         dinovely = 0
-    if jumping and dinoy <= 100:
+    if jumping and dinoy <= 120:
         dinovely += 1
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -147,9 +158,6 @@ while running:
     if walkpoint > 8:
         walkpoint = 0
 
-    pavx -= AVANZ
-    if pavx == -1200:
-        pavx = 0
 
     if cacti[-1].x < randint(-10, 200):
         cacti.append(Cactus())
