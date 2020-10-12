@@ -88,7 +88,6 @@ def initialize():
     AVANZ = 4
 
 
-
 # Chiamo la funzione inizializza
 initialize()
 
@@ -131,19 +130,20 @@ while running:
     score += 0.166
     time += 0.016
     pavx -= AVANZ
-    
+
     if pavx <= -1200:
         pavx = 0
-    
-    if time > 10:
-		time = 0
-		AVANZ += 0.5
+
+    if time > 20:
+        time = 0
+        AVANZ += 1
     if dinoy >= 200:
         jumping = False
         dinoy = 200
         dinovely = 0
     if jumping and dinoy <= 120:
         dinovely += 1
+        walkpoint = 0
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             if not jumping:
@@ -157,7 +157,6 @@ while running:
 
     if walkpoint > 8:
         walkpoint = 0
-
 
     if cacti[-1].x < randint(-10, 200):
         cacti.append(Cactus())
