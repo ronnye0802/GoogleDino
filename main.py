@@ -122,7 +122,9 @@ def gameover():
                 initialize()
                 dead = False
             if event.type == pygame.QUIT:
-                pygame.quit()
+                running = False
+                dead = False
+                quit()
 
 
 # Main loop del gioco, dove avvengono la maggior parte dei calcoli
@@ -175,4 +177,5 @@ while running:
     update()
 
 # In caso si clicchi la X per uscire dal gioco viene chiamato il method quit()
-pygame.quit()
+def quit():
+    pygame.quit()
