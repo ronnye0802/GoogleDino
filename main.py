@@ -35,9 +35,10 @@ class Cloud:
     def __init__(self):
         self.x = 650
         self.y = randint(10, 150)
+        self.avanz = 4
 
     def generate(self):
-        self.x -= AVANZ
+        self.x -= self.avanz
         SCHERMO.blit(cloud, (self.x, self.y))
 
 
@@ -47,9 +48,10 @@ class Cactus:
         self.x = 700
         self.y = randint(200, 210)
         self.rnd = randint(0, 4)
+        self.ava = AVANZ
 
     def drawself(self):
-        self.x -= AVANZ
+        self.x -= self.ava
         SCHERMO.blit(ostacoli[self.rnd], (self.x, self.y))
 
     def collision(self, dino, dinox, dinoy):
