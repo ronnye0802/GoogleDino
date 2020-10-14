@@ -1,4 +1,5 @@
 import pygame
+import time as tm
 from random import randint
 
 pygame.init()
@@ -22,6 +23,7 @@ ostacoli = [cactus, cactus2, cactus3, cactus4, cactusGroup]
 
 # Costanti del gioco
 clock = pygame.time.Clock()
+last_time = tm.time()
 SCHERMO = pygame.display.set_mode((600, 300))
 pygame.display.set_caption("DinoGame! %d FPS" % clock.get_fps())
 FPS = 60
@@ -37,7 +39,7 @@ class Cloud:
         self.y = randint(10, 150)
 
     def generate(self):
-        self.x -= AVANZ
+        self.x -= AVANZ * dt
         SCHERMO.blit(cloud, (self.x, self.y))
 
 
@@ -49,7 +51,7 @@ class Cactus:
         self.rnd = randint(0, 4)
 
     def drawself(self):
-        self.x -= AVANZ
+        self.x -= AVANZ * dt
         SCHERMO.blit(ostacoli[self.rnd], (self.x, self.y))
 
     def collision(self, dino, dinox, dinoy):
@@ -109,7 +111,7 @@ def draw():
 # Qui definisco una funzione per creare un "timer" che manda avanti il gioco definendo i "Tick" del gioco
 def update():
     pygame.display.update()
-    pygame.time.Clock().tick(FPS)
+    clock.tick(FPS)
 
 
 def gameover():
@@ -129,9 +131,13 @@ def gameover():
 
 # Main loop del gioco, dove avvengono la maggior parte dei calcoli
 while running:
+    dt = tm.time() - last_time
+    dt *= 60
+    last_time = tm.time()
+
     score += 0.166
     time += 0.016
-    pavx -= AVANZ
+    pavx -= AVANZ * dt
 
     if pavx <= -1200:
         pavx = 0
@@ -144,13 +150,13 @@ while running:
         dinoy = 200
         dinovely = 0
     if jumping and dinoy <= 120:
-        dinovely += 1
+        dinovely += 1 * dt
         walkpoint = 0
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             if not jumping:
                 jumping = True
-                dinovely = -10
+                dinovely = -10 * dt
 
         if event.type == pygame.QUIT:
             running = False
