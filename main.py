@@ -64,6 +64,8 @@ class Cactus:
         dinodown = dinoy + dino.get_height() - tollerance
         cactusup = self.y
         cactusdown = self.y - 5
+        if self.x <= -10:
+            cacti.remove(self)
         if dinodx > cactussx and dinosx < cactusdx:
             if dinoup < cactusup and dinodown > cactusdown:
                 gameover()
