@@ -170,8 +170,8 @@ while running:
 
     if cacti[-1].x < randint(-10, 200):
         cacti.append(Cactus())
-        if cacti[-1].x < -10:
-            cacti.pop(-2)
+#       if cacti[-1].x < -10:
+#           cacti.pop(-2)
     if clouds[-1].x < -10:
         clouds.pop(-2)
     if clouds[-1].x < randint(200, 300):
