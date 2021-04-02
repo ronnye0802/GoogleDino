@@ -23,7 +23,7 @@ ostacoli = [cactus, cactus2, cactus3, cactus4, cactusGroup]
 
 # Costanti del gioco
 clock = pygame.time.Clock()
-last_time = tm.time()
+last_time = 0 #tm.time()
 SCHERMO = pygame.display.set_mode((600, 300))
 pygame.display.set_caption("DinoGame! %d FPS" % clock.get_fps())
 FPS = 60
@@ -86,7 +86,7 @@ def initialize():
     dinox, dinoy, dinovely, jumping = 70, 200, 0, False
     pavx, pavy = 0, 235
     walkpoint = 0
-    AVANZ = 4
+    AVANZ = 250
     cacti = [Cactus()]
     clouds = [Cloud()]
     score, time = 0, 0
@@ -133,9 +133,9 @@ def gameover():
 
 # Main loop del gioco, dove avvengono la maggior parte dei calcoli
 while running:
-    dt = tm.time() - last_time
-    dt *= 60
-    last_time = tm.time()
+    t = pygame.time.get_ticks()
+    dt = (t - last_time)/1000.0
+    last_time = t
 
     score += 0.166
     time += 0.016
@@ -144,21 +144,21 @@ while running:
     if pavx <= -1200:
         pavx = 0
 
-    if time > 20:
+    if time > 10:
         time = 0
-        AVANZ += 1
+        AVANZ *= 1.1
     if dinoy >= 200:
         jumping = False
         dinoy = 200
         dinovely = 0
     if jumping and dinoy <= 120:
-        dinovely += 1 * dt
+        dinovely += 50 * dt
         walkpoint = 0
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             if not jumping:
                 jumping = True
-                dinovely = -10 * dt
+                dinovely = -500 * dt
 
         if event.type == pygame.QUIT:
             running = False
@@ -173,9 +173,10 @@ while running:
 #       if cacti[-1].x < -10:
 #           cacti.pop(-2)
     if clouds[-1].x < -10:
-        clouds.pop(-2)
-    if clouds[-1].x < randint(200, 300):
-        clouds.append(Cloud())
+        clouds.remove(clouds[-1])
+    if len(clouds) > 0:
+        if clouds[-1].x < randint(-10, 300):
+            clouds.append(Cloud())
 
     for c in cacti:
         c.collision(dino, dinox, dinoy)
